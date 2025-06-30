@@ -1,10 +1,8 @@
 import React from 'react'
-import type { Metadata } from 'next'
-import type { JSX } from 'react'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { Toaster } from 'react-hot-toast'
-import { AuthProvider } from '@/src/contexts/AuthContext'
+import ClientLayout from './ClientLayout'
 
 // Инициализация шрифта Inter
 const inter = Inter({ 
@@ -85,8 +83,6 @@ export const metadata: Metadata = {
     google: 'your-google-verification-code',
     yandex: 'your-yandex-verification-code',
   },
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=5',
-  themeColor: '#22c55e',
   manifest: '/site.webmanifest',
   icons: {
     icon: [
@@ -105,12 +101,23 @@ export const metadata: Metadata = {
   }
 }
 
+// Конфигурация viewport
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#22c55e' },
+    { media: '(prefers-color-scheme: dark)', color: '#16a34a' }
+  ]
+}
+
 // Структура корневого layout
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
-}): JSX.Element {
+}) {
   return (
     <html lang="ru" className={inter.variable}>
       <head>
@@ -118,71 +125,9 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className={inter.className}>
-        <div className="antialiased">
-          <AuthProvider>
-            <main className="min-h-screen bg-neutral-50">
-              {children}
-            </main>
-          </AuthProvider>
-          
-          {/* Глобальные уведомления */}
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: '#363636',
-                color: '#fff',
-              },
-              success: {
-                duration: 3000,
-                iconTheme: {
-                  primary: '#22c55e',
-                  secondary: '#fff',
-                },
-              },
-              error: {
-                duration: 5000,
-                iconTheme: {
-                  primary: '#ef4444',
-                  secondary: '#fff',
-                },
-              },
-            }}
-          />
-          
-          {/* Скрипты аналитики */}
-          <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
-          />
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', 'GA_MEASUREMENT_ID');
-              `,
-            }}
-          />
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-                m[i].l=1*new Date();
-                for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-                k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-                (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-                ym(YANDEX_METRIKA_ID, "init", {
-                  clickmap:true,
-                  trackLinks:true,
-                  accurateTrackBounce:true
-                });
-              `,
-            }}
-          />
-        </div>
+        <ClientLayout>
+          {children}
+        </ClientLayout>
       </body>
     </html>
   )

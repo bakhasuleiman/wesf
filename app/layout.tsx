@@ -1,8 +1,10 @@
+import React from 'react'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from '@/src/contexts/AuthContext'
+import Head from 'next/head'
 
 // Инициализация шрифта Inter
 const inter = Inter({ 
@@ -90,8 +92,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ru" className={inter.variable}>
-      <head>
+    <>
+      <Head>
         {/* Preconnect для оптимизации загрузки */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -134,12 +136,9 @@ export default function RootLayout({
             })
           }}
         />
-      </head>
-      
-      <body className={`${inter.className} antialiased`}>
-        {/* Провайдер аутентификации */}
+      </Head>
+      <div className={`${inter.className} antialiased`}>
         <AuthProvider>
-          {/* Основной контент приложения */}
           <main className="min-h-screen bg-neutral-50">
             {children}
           </main>
@@ -171,7 +170,7 @@ export default function RootLayout({
           }}
         />
         
-        {/* Скрипт для аналитики (Google Analytics) */}
+        {/* Скрипты аналитики */}
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
@@ -186,8 +185,6 @@ export default function RootLayout({
             `,
           }}
         />
-        
-        {/* Скрипт для Yandex.Metrika */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -204,12 +201,16 @@ export default function RootLayout({
             `,
           }}
         />
-        <noscript>
-          <div>
-            <img src="https://mc.yandex.ru/watch/YANDEX_METRIKA_ID" style={{ position: 'absolute', left: '-9999px' }} alt="" />
-          </div>
-        </noscript>
-      </body>
-    </html>
+        {React.createElement('noscript', {},
+          React.createElement('div', {},
+            React.createElement('img', {
+              src: 'https://mc.yandex.ru/watch/YANDEX_METRIKA_ID',
+              style: { position: 'absolute', left: '-9999px' },
+              alt: ''
+            })
+          )
+        )}
+      </div>
+    </>
   )
 } 

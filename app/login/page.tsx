@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect } from 'react'
 
 const TELEGRAM_BOT = 'myweb_login_bot' // замените на имя вашего бота

@@ -5,12 +5,10 @@ import Link from 'next/link'
 import { User, LogOut, Settings, Store, ShoppingBag, Heart, ChevronDown } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/src/contexts/AuthContext'
-import AuthModal from './AuthModal'
 
 export default function ProfileDropdown() {
   const { user, isAuthenticated, logout } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
-  const [showAuthModal, setShowAuthModal] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   // Закрытие при клике вне компонента
@@ -33,8 +31,6 @@ export default function ProfileDropdown() {
   const handleProfileClick = () => {
     if (isAuthenticated) {
       setIsOpen(!isOpen)
-    } else {
-      setShowAuthModal(true)
     }
   }
 
@@ -171,12 +167,6 @@ export default function ProfileDropdown() {
           )}
         </AnimatePresence>
       </div>
-
-      {/* Модальное окно аутентификации */}
-      <AuthModal
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-      />
     </>
   )
 } 
